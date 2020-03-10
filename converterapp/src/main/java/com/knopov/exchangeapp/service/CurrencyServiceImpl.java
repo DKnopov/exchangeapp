@@ -1,12 +1,12 @@
-package com.knopov.converterapp.service;
+package com.knopov.exchangeapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.knopov.converterapp.dao.CurrencyCRUD;
-import com.knopov.converterapp.dto.CurrencyQueryDTO;
-import com.knopov.converterapp.dto.helper.FoundAndNotFound;
+import com.knopov.exchangeapp.dao.CurrencyCRUD;
+import com.knopov.exchangeapp.dto.CurrencyQueryDTO;
+import com.knopov.exchangeapp.dto.helper.FoundAndNotFound;
 
 @Service
 public class CurrencyServiceImpl implements CurrencyService {

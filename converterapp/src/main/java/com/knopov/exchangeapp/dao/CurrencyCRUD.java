@@ -1,7 +1,7 @@
-package com.knopov.converterapp.dao;
+package com.knopov.exchangeapp.dao;
 
-import com.knopov.converterapp.dto.CurrencyQueryDTO;
-import com.knopov.converterapp.dto.helper.FoundAndNotFound;
+import com.knopov.exchangeapp.dto.CurrencyQueryDTO;
+import com.knopov.exchangeapp.dto.helper.FoundAndNotFound;
 
 public interface CurrencyCRUD {
 	

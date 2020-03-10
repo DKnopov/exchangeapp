@@ -1,13 +1,13 @@
-package com.knopov.converterapp;
+package com.knopov.exchangeapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ConverterappApplication {
+public class ExchangeappApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ConverterappApplication.class, args);
+		SpringApplication.run(ExchangeappApplication.class, args);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.knopov.converterapp.rest;
+package com.knopov.exchangeapp.rest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.knopov.converterapp.dto.CurrencyQueryDTO;
-import com.knopov.converterapp.dto.CurrencyResponseDTO;
-import com.knopov.converterapp.dto.helper.CustomCurrencies;
-import com.knopov.converterapp.dto.helper.FoundAndNotFound;
-import com.knopov.converterapp.dto.helper.Rate;
-import com.knopov.converterapp.entity.Currency;
-import com.knopov.converterapp.service.CurrencyService;
+import com.knopov.exchangeapp.dto.CurrencyQueryDTO;
+import com.knopov.exchangeapp.dto.CurrencyResponseDTO;
+import com.knopov.exchangeapp.dto.helper.CustomCurrencies;
+import com.knopov.exchangeapp.dto.helper.FoundAndNotFound;
+import com.knopov.exchangeapp.dto.helper.Rate;
+import com.knopov.exchangeapp.entity.Currency;
+import com.knopov.exchangeapp.service.CurrencyService;
 
 @RestController
 public class CurrencyRestController {

@@ -1,4 +1,4 @@
-package com.knopov.converterapp.entity;
+package com.knopov.exchangeapp.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

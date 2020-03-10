@@ -1,7 +1,7 @@
-package com.knopov.converterapp.service;
+package com.knopov.exchangeapp.service;
 
-import com.knopov.converterapp.dto.CurrencyQueryDTO;
-import com.knopov.converterapp.dto.helper.FoundAndNotFound;
+import com.knopov.exchangeapp.dto.CurrencyQueryDTO;
+import com.knopov.exchangeapp.dto.helper.FoundAndNotFound;
 
 public interface CurrencyService {
 	public FoundAndNotFound transitionalResult(CurrencyQueryDTO order);

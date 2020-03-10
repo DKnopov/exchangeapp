@@ -1,4 +1,4 @@
-package com.knopov.converterapp.dao;
+package com.knopov.exchangeapp.dao;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,9 +10,9 @@ import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.knopov.converterapp.dto.CurrencyQueryDTO;
-import com.knopov.converterapp.dto.helper.FoundAndNotFound;
-import com.knopov.converterapp.entity.Currency;
+import com.knopov.exchangeapp.dto.CurrencyQueryDTO;
+import com.knopov.exchangeapp.dto.helper.FoundAndNotFound;
+import com.knopov.exchangeapp.entity.Currency;
 
 @Repository
 public class CurrencyCRUDImpl implements CurrencyCRUD {

@@ -1,9 +1,9 @@
-package com.knopov.converterapp.dto;
+package com.knopov.exchangeapp.dto;
 
 import java.util.List;
 
-import com.knopov.converterapp.dto.helper.CustomError;
-import com.knopov.converterapp.dto.helper.Rate;
+import com.knopov.exchangeapp.dto.helper.CustomError;
+import com.knopov.exchangeapp.dto.helper.Rate;
 
 public class CurrencyResponseDTO {
 	private List<Rate> rates;

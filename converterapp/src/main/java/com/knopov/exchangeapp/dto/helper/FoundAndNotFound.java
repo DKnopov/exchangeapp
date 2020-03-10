@@ -1,8 +1,8 @@
-package com.knopov.converterapp.dto.helper;
+package com.knopov.exchangeapp.dto.helper;
 
 import java.util.List;
 
-import com.knopov.converterapp.entity.Currency;
+import com.knopov.exchangeapp.entity.Currency;
 
 public class FoundAndNotFound {
 	private List<Currency> found;

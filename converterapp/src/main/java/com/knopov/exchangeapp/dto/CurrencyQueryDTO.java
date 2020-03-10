@@ -1,4 +1,4 @@
-package com.knopov.converterapp.dto;
+package com.knopov.exchangeapp.dto;
 
 import java.util.List;
 

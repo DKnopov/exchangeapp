@@ -1,4 +1,4 @@
-package com.knopov.converterapp.dto.helper;
+package com.knopov.exchangeapp.dto.helper;
 
 import java.util.Map;
 
