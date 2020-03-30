@@ -1,6 +1,7 @@
-package com.knopov.exchangeapp.entity;
+package com.knopov.exchangeapp.entity.helper;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 import javax.persistence.Embeddable;
 
@@ -11,8 +12,8 @@ public class Keys implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String currencyName;
-	private String date;
-	
+	private LocalDate date;
+
 	public Keys() {
 	}
 
@@ -24,11 +25,13 @@ public class Keys implements Serializable {
 		this.currencyName = currencyName;
 	}
 
-	public String getDate() {
+
+
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 
@@ -62,6 +65,5 @@ public class Keys implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
+
 }

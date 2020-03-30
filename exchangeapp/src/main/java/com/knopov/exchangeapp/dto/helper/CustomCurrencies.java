@@ -21,4 +21,9 @@ public class CustomCurrencies {
 		this.customCurrencies = customCurrencies;
 	}
 
+	@Override
+	public String toString() {
+		return "CustomCurrencies [customCurrencies=" + customCurrencies + "]";
+	}
+
 }

@@ -40,6 +40,11 @@ public class CurrencyQueryDTO {
 	public void setEndAt(String endAt) {
 		this.endAt = endAt;
 	}
+
+	@Override
+	public String toString() {
+		return "CurrencyQueryDTO [symbols=" + symbols + ", startAt=" + startAt + ", endAt=" + endAt + "]";
+	}
 	
 	
 	

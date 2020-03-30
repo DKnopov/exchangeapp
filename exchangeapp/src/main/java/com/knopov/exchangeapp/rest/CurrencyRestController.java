@@ -1,22 +1,12 @@
 package com.knopov.exchangeapp.rest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.knopov.exchangeapp.dto.CurrencyQueryDTO;
 import com.knopov.exchangeapp.dto.CurrencyResponseDTO;
-import com.knopov.exchangeapp.dto.helper.CustomCurrencies;
-import com.knopov.exchangeapp.dto.helper.FoundAndNotFound;
-import com.knopov.exchangeapp.dto.helper.Rate;
 import com.knopov.exchangeapp.entity.Currency;
 import com.knopov.exchangeapp.service.CurrencyService;
 
@@ -35,38 +25,14 @@ public class CurrencyRestController {
 	
 	@PostMapping("/currencies")
 	public CurrencyResponseDTO getCurrencies(@RequestBody CurrencyQueryDTO query) {
-		FoundAndNotFound foundAndNotFound = currencyService.transitionalResult(query);
-		List<Currency> found = foundAndNotFound.getFound();
-		List<Currency> needToFind = foundAndNotFound.getNeedToFind();
-		CurrencyResponseDTO res = new CurrencyResponseDTO();
-		Rate rate = new Rate();
-		List<Rate> rates = new ArrayList<>();
-		CustomCurrencies custCur = new CustomCurrencies();
-		Map<String, Double> curMap = new HashMap<>();
-		Map<String, CustomCurrencies> datesAndCurrencies = new HashMap<>();
-		if (needToFind.isEmpty()) {
-			for (Currency currency : found) {
-				curMap.put(currency.getCurrencyName(), currency.getValue());
-				custCur.setCustomCurrencies(curMap);
-				datesAndCurrencies.put(currency.getDate(), custCur);
-				rate.setDatesAndCurrencies(datesAndCurrencies);
-				rates.add(rate);
-			}
-			res.setRates(rates);
-		} else {
-			String[] symbols = new String[needToFind.size()];
-			for (int i = 0; i < symbols.length; i++) {
-				symbols[i] = needToFind.get(i).getCurrencyName();
-			}
-			res = askFromApi("USD", symbols, needToFind.get(0).getDate(), needToFind.get(needToFind.size()).getDate());
-		}
-		return res;
-
+		
+		return currencyService.getCurrencies(query);
 	}
 
-	@GetMapping("http://api.exchangeratesapi.io/history")
-	public CurrencyResponseDTO askFromApi(@RequestParam String base, String[] symbols, String start_at, String end_at) {
-		return new CurrencyResponseDTO();
+	
+	@PostMapping("/add")
+	public void addFewCurrenciesManually(@RequestBody Currency cur) {
+		currencyService.addFewCurrenciesManually(cur);
 	}
 
 }

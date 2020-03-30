@@ -1,13 +1,17 @@
 package com.knopov.exchangeapp.entity;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
+import com.knopov.exchangeapp.entity.helper.Keys;
+
 @Entity
-@Table(name = "public.main")
+@Table(name = "main")
 @IdClass(Keys.class)
 public class Currency {
 
@@ -17,7 +21,8 @@ public class Currency {
 
 	@Id
 	@Column(name = "date_needed")
-	private String date;
+	//@Convert(converter = LocalDateConverter.class)
+	private LocalDate date;
 
 	@Column(name = "value_cur")
 	private double value;
@@ -26,7 +31,7 @@ public class Currency {
 
 	}
 
-	public Currency(String currencyName, String date, double value) {
+	public Currency(String currencyName, LocalDate date, double value) {
 		this.currencyName = currencyName;
 		this.date = date;
 		this.value = value;
@@ -42,11 +47,11 @@ public class Currency {
 		this.currencyName = currencyName;
 	}
 
-	public String getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 
@@ -62,5 +67,7 @@ public class Currency {
 	public String toString() {
 		return "Currency [currencyName=" + currencyName + ", date=" + date + ", value=" + value + "]";
 	}
+	
+	
 
 }

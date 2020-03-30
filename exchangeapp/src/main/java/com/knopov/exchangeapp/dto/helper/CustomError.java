@@ -20,6 +20,11 @@ public class CustomError {
 	public void setErrors(Map<String, String> errors) {
 		this.errors = errors;
 	}
+
+	@Override
+	public String toString() {
+		return "CustomError [errors=" + errors + "]";
+	}
 	
 	
 

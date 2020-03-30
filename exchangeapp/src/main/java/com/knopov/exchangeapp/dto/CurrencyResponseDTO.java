@@ -33,4 +33,9 @@ public class CurrencyResponseDTO {
 		this.errors = errors;
 	}
 
+	@Override
+	public String toString() {
+		return "CurrencyResponseDTO [rates=" + rates + ", errors=" + errors + "]";
+	}
+
 }
