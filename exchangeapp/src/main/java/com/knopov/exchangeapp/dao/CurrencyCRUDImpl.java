@@ -13,20 +13,12 @@ import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.knopov.exchangeapp.dto.CurrencyQueryDTO;
 import com.knopov.exchangeapp.dto.CurrencyResponseDTO;
-import com.knopov.exchangeapp.dto.ResponceFromApiDTO;
-import com.knopov.exchangeapp.dto.helper.CurrencyApiInterface;
-import com.knopov.exchangeapp.dto.helper.CustomCurrencies;
-import com.knopov.exchangeapp.dto.helper.Rate;
 import com.knopov.exchangeapp.entity.Currency;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 @Repository
 public class CurrencyCRUDImpl implements CurrencyCRUD {
@@ -43,19 +35,16 @@ public class CurrencyCRUDImpl implements CurrencyCRUD {
 	public CurrencyResponseDTO getCurrencies(CurrencyQueryDTO order) {
 		Query theQuery;
 		List<String> symbols = order.getSymbols();
-		LocalDate from = LocalDate.parse(order.getStartAt());
-		LocalDate to = LocalDate.parse(order.getEndAt());
+		LocalDate from = order.getStartAt();
+		LocalDate to = order.getEndAt().plusDays(1);
 		List<Currency> currencies;
 
 		List<Currency> found = new ArrayList<Currency>();
 		List<Currency> needToFind = new ArrayList<Currency>();
 
 		CurrencyResponseDTO res = new CurrencyResponseDTO();
-		Rate rate = new Rate();
-		List<Rate> rates = new ArrayList<>();
-		CustomCurrencies custCur = new CustomCurrencies();
+		Map<LocalDate, Map<String, Double>> rate = new HashMap<LocalDate, Map<String, Double>>();
 		Map<String, Double> curMap = new HashMap<>();
-		Map<LocalDate, CustomCurrencies> datesAndCurrencies = new HashMap<>();
 
 		for (String currencyName : symbols) {
 
@@ -65,6 +54,7 @@ public class CurrencyCRUDImpl implements CurrencyCRUD {
 
 			theQuery.setParameter("currencyName", currencyName).setParameter("from", from).setParameter("to", to);
 			currencies = (List<Currency>) theQuery.getResultList();
+			System.out.println(currencies);
 
 			if (currencies.equals(null) || currencies.isEmpty()) {
 				for (LocalDate i = from; i.isBefore(to); i = i.plusDays(1)) {
@@ -89,52 +79,46 @@ public class CurrencyCRUDImpl implements CurrencyCRUD {
 		if (needToFind.isEmpty()) {
 			for (Currency currency : found) {
 				curMap.put(currency.getCurrencyName(), currency.getValue());
-				custCur.setCustomCurrencies(curMap);
-				datesAndCurrencies.put(currency.getDate(), custCur);
-				rate.setDatesAndCurrencies(datesAndCurrencies);
-				rates.add(rate);
+				rate.put(currency.getDate(), curMap);
 			}
-			res.setRates(rates);
+			res.setRates(rate);
 		} else {
 
 			Set<String> symbs = new HashSet<>();
-			needToFind.forEach(System.out::println);
 
 			needToFind.forEach(a -> symbs.add(a.getCurrencyName()));
 			symbs.forEach(System.out::println);
-			Retrofit retrofit = new Retrofit.Builder().baseUrl("https://api.exchangeratesapi.io/")
-					.addConverterFactory(GsonConverterFactory.create()).build();
-			CurrencyApiInterface currencyInterface = retrofit.create(CurrencyApiInterface.class);
-			Call<ResponceFromApiDTO> call = currencyInterface.getCurrency(symbs, needToFind.get(0).getDate(),
-					needToFind.get(needToFind.size() - 1).getDate());
-			Call<ResponceFromApiDTO> call1 = currencyInterface.getCurrency(symbs, LocalDate.parse("2020-10-10"),
-					LocalDate.parse("2020-10-25"));
-			call1.enqueue(new Callback<ResponceFromApiDTO>() {
 
-				@Override
-				public void onResponse(Call<ResponceFromApiDTO> call, Response<ResponceFromApiDTO> response) {
+			String ourUrl = "https://api.exchangeratesapi.io/history";
+			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(ourUrl).queryParam("symbols", symbs)
+					.queryParam("start_at", needToFind.get(0).getDate())
+					.queryParam("end_at", needToFind.get(needToFind.size() - 1).getDate()).queryParam("base", "USD");
+			RestTemplate restTemplate = new RestTemplate();
+			CurrencyResponseDTO response = restTemplate.getForObject(builder.toUriString(), CurrencyResponseDTO.class);
+			System.out.println(response);
+			addFewCurrenciesToDb(response);
+			response.addMoreCurrencies(found);
+			res = response;
 
-					System.out.println(call.isExecuted());
-					ResponceFromApiDTO resp = response.body();
-					System.out.println(response.isSuccessful());
-					System.out.println(resp);
-					// list.forEach(System.out::println);
-				}
-
-				@Override
-				public void onFailure(Call<ResponceFromApiDTO> call, Throwable t) {
-					// TODO Auto-generated method stub
-
-				}
-			});
 		}
 
-		return null;
+		return res;
+	}
+
+	public void addFewCurrenciesToDb(CurrencyResponseDTO given) {
+		Currency cur;
+		Map<LocalDate, Map<String, Double>> rates = given.getRates();
+		for (Map.Entry<LocalDate, Map<String, Double>> entry : rates.entrySet()) {
+			for (Map.Entry<String, Double> innerEntry : entry.getValue().entrySet()) {
+				cur = new Currency(innerEntry.getKey(), entry.getKey(), innerEntry.getValue());
+				entityManager.merge(cur);
+			}
+		}
 	}
 
 	@Override
-	public Currency addFewCurrenciesManually(Currency cur) {
-		entityManager.persist(cur);
+	public Currency addCurrencyManually(Currency cur) {
+		entityManager.merge(cur);
 		return cur;
 	}
 

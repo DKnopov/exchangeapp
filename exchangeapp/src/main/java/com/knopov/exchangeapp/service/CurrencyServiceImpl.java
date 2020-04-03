@@ -23,7 +23,7 @@ public class CurrencyServiceImpl implements CurrencyService {
 	@Override
 	@Transactional
 	public Currency addFewCurrenciesManually(Currency cur) {
-		return currencyCRUD.addFewCurrenciesManually(cur);
+		return currencyCRUD.addCurrencyManually(cur);
 	}
 
 

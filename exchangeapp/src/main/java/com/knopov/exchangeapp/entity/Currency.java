@@ -10,6 +10,17 @@ import javax.persistence.Table;
 
 import com.knopov.exchangeapp.entity.helper.Keys;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "main")
 @IdClass(Keys.class)
@@ -21,53 +32,9 @@ public class Currency {
 
 	@Id
 	@Column(name = "date_needed")
-	//@Convert(converter = LocalDateConverter.class)
 	private LocalDate date;
 
 	@Column(name = "value_cur")
 	private double value;
-
-	public Currency() {
-
-	}
-
-	public Currency(String currencyName, LocalDate date, double value) {
-		this.currencyName = currencyName;
-		this.date = date;
-		this.value = value;
-	}
-	
-	
-
-	public String getCurrencyName() {
-		return currencyName;
-	}
-
-	public void setCurrencyName(String currencyName) {
-		this.currencyName = currencyName;
-	}
-
-	public LocalDate getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
-
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
-
-	@Override
-	public String toString() {
-		return "Currency [currencyName=" + currencyName + ", date=" + date + ", value=" + value + "]";
-	}
-	
-	
 
 }

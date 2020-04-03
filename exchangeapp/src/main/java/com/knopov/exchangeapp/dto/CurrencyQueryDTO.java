@@ -1,52 +1,24 @@
 package com.knopov.exchangeapp.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CurrencyQueryDTO {
+	
 	private List<String> symbols;
-	private String startAt;
-	private String endAt;
-	
-	public CurrencyQueryDTO() {
-		
-	}
+	private LocalDate startAt;
+	private LocalDate endAt;
 
-	public CurrencyQueryDTO(List<String> symbols, String startAt, String endAt) {
-		this.symbols = symbols;
-		this.startAt = startAt;
-		this.endAt = endAt;
-	}
-
-	public List<String> getSymbols() {
-		return symbols;
-	}
-
-	public void setSymbols(List<String> symbols) {
-		this.symbols = symbols;
-	}
-
-	public String getStartAt() {
-		return startAt;
-	}
-
-	public void setStartAt(String startAt) {
-		this.startAt = startAt;
-	}
-
-	public String getEndAt() {
-		return endAt;
-	}
-
-	public void setEndAt(String endAt) {
-		this.endAt = endAt;
-	}
-
-	@Override
-	public String toString() {
-		return "CurrencyQueryDTO [symbols=" + symbols + ", startAt=" + startAt + ", endAt=" + endAt + "]";
-	}
-	
-	
-	
 	
 }

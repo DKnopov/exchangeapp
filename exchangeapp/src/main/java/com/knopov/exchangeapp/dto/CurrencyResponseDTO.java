@@ -1,41 +1,42 @@
 package com.knopov.exchangeapp.dto;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.knopov.exchangeapp.dto.helper.CustomError;
-import com.knopov.exchangeapp.dto.helper.Rate;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.knopov.exchangeapp.entity.Currency;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CurrencyResponseDTO {
-	private List<Rate> rates;
-	private List<CustomError> errors = null;
 
-	public CurrencyResponseDTO() {
+	/*
+	 * private Rate rates; private CustomError errors = null;
+	 */
+	private Map<LocalDate, Map<String, Double>> rates;
+
+	public void addMoreCurrencies(List<Currency> currencies) {
+		Map<String, Double> operMap = new HashMap<String, Double>();
+		for (Currency currency : currencies) {
+			if (rates.containsKey(currency.getDate())) {
+				operMap = rates.get(currency.getDate());
+				operMap.put(currency.getCurrencyName(), currency.getValue());
+			} else {
+				operMap.put(currency.getCurrencyName(), currency.getValue());
+			}
+			rates.put(currency.getDate(), operMap);
+		}
 	}
-
-	public CurrencyResponseDTO(List<Rate> rates, List<CustomError> errors) {
-		this.rates = rates;
-		this.errors = errors;
-	}
-
-	public List<Rate> getRates() {
-		return rates;
-	}
-
-	public void setRates(List<Rate> rates) {
-		this.rates = rates;
-	}
-
-	public List<CustomError> getErrors() {
-		return errors;
-	}
-
-	public void setErrors(List<CustomError> errors) {
-		this.errors = errors;
-	}
-
-	@Override
-	public String toString() {
-		return "CurrencyResponseDTO [rates=" + rates + ", errors=" + errors + "]";
-	}
-
 }

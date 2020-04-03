@@ -6,9 +6,8 @@ import com.knopov.exchangeapp.entity.Currency;
 
 public interface CurrencyCRUD {
 
-	//public FoundAndNotFound transitionalResult(CurrencyQueryDTO order);
-
-	public Currency addFewCurrenciesManually(Currency cur);
+	// HELPER METHOD
+	public Currency addCurrencyManually(Currency cur);
 
 	public CurrencyResponseDTO getCurrencies(CurrencyQueryDTO order);
 
