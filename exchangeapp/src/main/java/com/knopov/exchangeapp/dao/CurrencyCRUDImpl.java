@@ -55,10 +55,7 @@ public class CurrencyCRUDImpl implements CurrencyCRUD {
 
 			theQuery.setParameter("currencyName", currencyName).setParameter("from", from).setParameter("to", to);
 			currencies = (List<Currency>) theQuery.getResultList();
-			System.out.println();
-			System.out.println(currencies);
-			System.out.println();
-
+			
 			if (currencies.equals(null) || currencies.isEmpty()) {
 				for (LocalDate i = from; i.isBefore(to); i = i.plusDays(1)) {
 					Currency cur = new Currency(currencyName, i, 0);
@@ -81,10 +78,6 @@ public class CurrencyCRUDImpl implements CurrencyCRUD {
 			}
 		}
 
-		System.out.println("FOUND list: " + found);
-		System.out.println();
-		System.out.println("NEED TO FIND list: " + needToFind);
-
 		if (needToFind.isEmpty()) {
 			for (Currency currency : found) {
 				curMap.put(currency.getCurrencyName(), currency.getValue());
@@ -96,7 +89,6 @@ public class CurrencyCRUDImpl implements CurrencyCRUD {
 			Set<String> symbs = new HashSet<>();
 
 			needToFind.forEach(a -> symbs.add(a.getCurrencyName()));
-			symbs.forEach(System.out::println);
 
 			String ourUrl = "https://api.exchangeratesapi.io/history";
 			UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(ourUrl).queryParam("symbols", symbs)
@@ -104,11 +96,8 @@ public class CurrencyCRUDImpl implements CurrencyCRUD {
 					.queryParam("end_at", needToFind.get(needToFind.size() - 1).getDate()).queryParam("base", "USD");
 			RestTemplate restTemplate = new RestTemplate();
 			CurrencyResponseDTO response = restTemplate.getForObject(builder.toUriString(), CurrencyResponseDTO.class);
-			System.out.println(response);
 			addFewCurrenciesToDb(response, found);
 			response.addMoreCurrencies(found);
-			System.out.println();
-			System.out.println(response);
 			res = response.createWithErrorDTO(needToFind);
 		}
 
