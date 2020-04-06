@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.knopov.exchangeapp.dao.CurrencyCRUD;
 import com.knopov.exchangeapp.dto.CurrencyQueryDTO;
 import com.knopov.exchangeapp.dto.CurrencyResponseDTO;
-import com.knopov.exchangeapp.entity.Currency;
 
 @Service
 public class CurrencyServiceImpl implements CurrencyService {
@@ -22,15 +21,8 @@ public class CurrencyServiceImpl implements CurrencyService {
 
 	@Override
 	@Transactional
-	public Currency addFewCurrenciesManually(Currency cur) {
-		return currencyCRUD.addCurrencyManually(cur);
-	}
-
-
-	@Override
-	@Transactional
 	public CurrencyResponseDTO getCurrencies(CurrencyQueryDTO order) {
-		// TODO Auto-generated method stub
+	
 		return currencyCRUD.getCurrencies(order);
 	}
 	

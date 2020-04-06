@@ -21,18 +21,10 @@ public class CurrencyRestController {
 	}
 
 	
-	//TODO to transfer all logic from handler
-	
 	@PostMapping("/currencies")
 	public CurrencyResponseDTO getCurrencies(@RequestBody CurrencyQueryDTO query) {
 		
 		return currencyService.getCurrencies(query);
-	}
-
-	
-	@PostMapping("/add")
-	public void addFewCurrenciesManually(@RequestBody Currency cur) {
-		currencyService.addFewCurrenciesManually(cur);
 	}
 
 }

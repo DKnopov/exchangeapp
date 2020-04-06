@@ -49,12 +49,15 @@ public class CurrencyCRUDImpl implements CurrencyCRUD {
 		for (String currencyName : symbols) {
 
 			theQuery = entityManager.createQuery(
-					"FROM Currency WHERE currency_name = :currencyName AND ( date_needed BETWEEN :from AND :to )",
+					"FROM Currency WHERE currency_name = :currencyName AND ( date_needed BETWEEN :from AND :to )"
+							+ "ORDER BY date_needed",
 					Currency.class);
 
 			theQuery.setParameter("currencyName", currencyName).setParameter("from", from).setParameter("to", to);
 			currencies = (List<Currency>) theQuery.getResultList();
+			System.out.println();
 			System.out.println(currencies);
+			System.out.println();
 
 			if (currencies.equals(null) || currencies.isEmpty()) {
 				for (LocalDate i = from; i.isBefore(to); i = i.plusDays(1)) {
@@ -62,10 +65,12 @@ public class CurrencyCRUDImpl implements CurrencyCRUD {
 					needToFind.add(cur);
 				}
 			} else {
-				for (LocalDate i = from; i.isBefore(to); i = i.plusDays(1)) {
-					int j = 0;
-					Currency thisCur = currencies.get(j);
-					LocalDate date = thisCur.getDate();
+				Currency thisCur;
+				LocalDate date;
+				int j = 0;
+				for (LocalDate i = from; j < currencies.size(); i = i.plusDays(1)) {
+					thisCur = currencies.get(j);
+					date = thisCur.getDate();
 					if (date.equals(i)) {
 						found.add(thisCur);
 						j++;
@@ -75,6 +80,10 @@ public class CurrencyCRUDImpl implements CurrencyCRUD {
 				}
 			}
 		}
+
+		System.out.println("FOUND list: " + found);
+		System.out.println();
+		System.out.println("NEED TO FIND list: " + needToFind);
 
 		if (needToFind.isEmpty()) {
 			for (Currency currency : found) {
@@ -96,30 +105,27 @@ public class CurrencyCRUDImpl implements CurrencyCRUD {
 			RestTemplate restTemplate = new RestTemplate();
 			CurrencyResponseDTO response = restTemplate.getForObject(builder.toUriString(), CurrencyResponseDTO.class);
 			System.out.println(response);
-			addFewCurrenciesToDb(response);
+			addFewCurrenciesToDb(response, found);
 			response.addMoreCurrencies(found);
-			res = response;
-
+			System.out.println();
+			System.out.println(response);
+			res = response.createWithErrorDTO(needToFind);
 		}
 
 		return res;
 	}
 
-	public void addFewCurrenciesToDb(CurrencyResponseDTO given) {
+	public void addFewCurrenciesToDb(CurrencyResponseDTO given, List<Currency> found) {
 		Currency cur;
 		Map<LocalDate, Map<String, Double>> rates = given.getRates();
 		for (Map.Entry<LocalDate, Map<String, Double>> entry : rates.entrySet()) {
 			for (Map.Entry<String, Double> innerEntry : entry.getValue().entrySet()) {
 				cur = new Currency(innerEntry.getKey(), entry.getKey(), innerEntry.getValue());
-				entityManager.merge(cur);
+				if (!found.contains(cur)) {
+					entityManager.merge(cur);
+				}
 			}
 		}
-	}
-
-	@Override
-	public Currency addCurrencyManually(Currency cur) {
-		entityManager.merge(cur);
-		return cur;
 	}
 
 }
